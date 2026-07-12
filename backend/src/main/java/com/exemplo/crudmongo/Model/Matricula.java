@@ -1,6 +1,10 @@
 package com.exemplo.crudmongo.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "matricula")
@@ -8,9 +12,23 @@ public class Matricula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "pessoaId é obrigatório")
+    @Positive(message = "pessoaId deve ser positivo")
+    @Column(nullable = false)
     private Long pessoaId;
+
+    @NotNull(message = "cursoId é obrigatório")
+    @Positive(message = "cursoId deve ser positivo")
+    @Column(nullable = false)
     private Long cursoId;
+
+    @NotBlank(message = "Data da matrícula é obrigatória")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Data deve estar no formato yyyy-MM-dd")
+    @Column(nullable = false, length = 10)
     private String dataMatricula;
+
+    @Column(nullable = false)
     private boolean ativo;
 
     public Matricula() {}

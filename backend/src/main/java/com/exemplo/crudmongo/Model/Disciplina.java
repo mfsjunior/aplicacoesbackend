@@ -1,6 +1,8 @@
 package com.exemplo.crudmongo.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "disciplina")
@@ -8,7 +10,13 @@ public class Disciplina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 3, max = 120, message = "Nome deve ter entre 3 e 120 caracteres")
+    @Column(nullable = false, length = 120)
     private String nome;
+
+    @Column(nullable = false)
     private boolean ativo;
 
     public Disciplina() {}

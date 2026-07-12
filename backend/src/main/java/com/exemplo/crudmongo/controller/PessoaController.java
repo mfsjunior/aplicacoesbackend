@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Pessoa;
 import com.exemplo.crudmongo.service.PessoaService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,13 @@ public class PessoaController {
 
     @PostMapping
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Pessoa criar(@RequestBody Pessoa pessoa) {
+    public Pessoa criar(@Valid @RequestBody Pessoa pessoa) {
         return service.salvar(pessoa);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Pessoa atualizar(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+    public Pessoa atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
         return service.atualizar(id, pessoa);
     }
 

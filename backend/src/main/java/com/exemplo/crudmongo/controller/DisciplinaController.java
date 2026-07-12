@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Disciplina;
 import com.exemplo.crudmongo.service.DisciplinaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +27,11 @@ public class DisciplinaController {
 
     @PostMapping
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Disciplina create(@RequestBody Disciplina disciplina) { return service.save(disciplina); }
+    public Disciplina create(@Valid @RequestBody Disciplina disciplina) { return service.save(disciplina); }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Disciplina update(@PathVariable Long id, @RequestBody Disciplina disciplina) {
+    public Disciplina update(@PathVariable Long id, @Valid @RequestBody Disciplina disciplina) {
         disciplina.setId(id);
         return service.save(disciplina);
     }

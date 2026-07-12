@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Avaliacao;
 import com.exemplo.crudmongo.service.AvaliacaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +27,11 @@ public class AvaliacaoController {
 
     @PostMapping
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Avaliacao create(@RequestBody Avaliacao avaliacao) { return service.save(avaliacao); }
+    public Avaliacao create(@Valid @RequestBody Avaliacao avaliacao) { return service.save(avaliacao); }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Avaliacao update(@PathVariable Long id, @RequestBody Avaliacao avaliacao) {
+    public Avaliacao update(@PathVariable Long id, @Valid @RequestBody Avaliacao avaliacao) {
         avaliacao.setId(id);
         return service.save(avaliacao);
     }

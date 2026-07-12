@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Matricula;
 import com.exemplo.crudmongo.service.MatriculaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +27,11 @@ public class MatriculaController {
 
     @PostMapping
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Matricula create(@RequestBody Matricula matricula) { return service.save(matricula); }
+    public Matricula create(@Valid @RequestBody Matricula matricula) { return service.save(matricula); }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Matricula update(@PathVariable Long id, @RequestBody Matricula matricula) {
+    public Matricula update(@PathVariable Long id, @Valid @RequestBody Matricula matricula) {
         matricula.setId(id);
         return service.save(matricula);
     }

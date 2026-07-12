@@ -1,6 +1,9 @@
 package com.exemplo.crudmongo.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
@@ -9,12 +12,19 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Username é obrigatório")
+    @Size(min = 3, max = 50, message = "Username deve ter entre 3 e 50 caracteres")
     @Column(unique = true, nullable = false)
     private String username;
 
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, max = 120, message = "Senha deve ter entre 6 e 120 caracteres")
     @Column(nullable = false)
     private String password;
 
+    @NotBlank(message = "Role é obrigatória")
+    @Pattern(regexp = "^(ALUNO|PROFESSOR)$", message = "Role deve ser ALUNO ou PROFESSOR")
+    @Column(nullable = false, length = 20)
     private String role;
 
     public Usuario() {}

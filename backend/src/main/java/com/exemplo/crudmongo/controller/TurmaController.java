@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Turma;
 import com.exemplo.crudmongo.service.TurmaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +27,11 @@ public class TurmaController {
 
     @PostMapping
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Turma create(@RequestBody Turma turma) { return service.save(turma); }
+    public Turma create(@Valid @RequestBody Turma turma) { return service.save(turma); }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
-    public Turma update(@PathVariable Long id, @RequestBody Turma turma) {
+    public Turma update(@PathVariable Long id, @Valid @RequestBody Turma turma) {
         turma.setId(id);
         return service.save(turma);
     }

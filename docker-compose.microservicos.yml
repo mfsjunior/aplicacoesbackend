@@ -1,0 +1,71 @@
+services:
+  gateway-service:
+    build:
+      context: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - matricula-service
+      - pessoa-service
+      - curso-service
+    networks:
+      - microservices-network
+
+  matricula-service:
+    build:
+      context: ./microservicos/matricula-service
+    container_name: matricula-service
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-network
+
+  pessoa-service:
+    build:
+      context: ./microservicos/pessoa-service
+    container_name: pessoa-service
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-network
+
+  curso-service:
+    build:
+      context: ./microservicos/curso-service
+    container_name: curso-service
+    ports:
+      - "8083:8083"
+    networks:
+      - microservices-network
+
+  disciplina-service:
+    build:
+      context: ./microservicos/disciplina-service
+    container_name: disciplina-service
+    ports:
+      - "8084:8084"
+    networks:
+      - microservices-network
+
+  professor-service:
+    build:
+      context: ./microservicos/professor-service
+    container_name: professor-service
+    ports:
+      - "8085:8085"
+    networks:
+      - microservices-network
+
+  turma-service:
+    build:
+      context: ./microservicos/turma-service
+    container_name: turma-service
+    ports:
+      - "8086:8086"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge

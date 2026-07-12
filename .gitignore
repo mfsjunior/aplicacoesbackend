@@ -20,6 +20,7 @@ desktop.ini
 # Docker
 docker-compose.override.yml
 docker-compose.*.yml
+!docker-compose.microservicos.yml
 **/Dockerfile.build
 /docker/*.tar
 /.docker/

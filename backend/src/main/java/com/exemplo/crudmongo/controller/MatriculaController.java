@@ -3,6 +3,7 @@ package com.exemplo.crudmongo.controller;
 import com.exemplo.crudmongo.Model.Matricula;
 import com.exemplo.crudmongo.service.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -36,4 +37,18 @@ public class MatriculaController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('PROFESSOR')")
     public void delete(@PathVariable Long id) { service.deleteById(id); }
+
+    @GetMapping("/busca")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ALUNO')")
+    public Page<Matricula> buscaAvancada(@RequestParam(required = false) Long pessoaId,
+                                         @RequestParam(required = false) Long cursoId,
+                                         @RequestParam(required = false) String dataInicio,
+                                         @RequestParam(required = false) String dataFim,
+                                         @RequestParam(required = false) Boolean ativo,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(defaultValue = "id") String sortBy,
+                                         @RequestParam(defaultValue = "asc") String direction) {
+        return service.buscarAvancado(pessoaId, cursoId, dataInicio, dataFim, ativo, page, size, sortBy, direction);
+    }
 }

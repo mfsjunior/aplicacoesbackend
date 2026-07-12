@@ -2,6 +2,7 @@ package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.Model.Curso;
 import com.exemplo.crudmongo.service.CursoService;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +40,18 @@ public class CursoController {
     @PreAuthorize("hasRole('PROFESSOR')")
     public void excluir(@PathVariable Long id) {
         service.excluir(id);
+    }
+
+    @GetMapping("/busca")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ALUNO')")
+    public Page<Curso> buscaAvancada(@RequestParam(required = false) String nome,
+                                     @RequestParam(required = false) Integer cargaHorariaMin,
+                                     @RequestParam(required = false) Integer cargaHorariaMax,
+                                     @RequestParam(required = false) Boolean ativo,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size,
+                                     @RequestParam(defaultValue = "id") String sortBy,
+                                     @RequestParam(defaultValue = "asc") String direction) {
+        return service.buscarAvancado(nome, cargaHorariaMin, cargaHorariaMax, ativo, page, size, sortBy, direction);
     }
 }

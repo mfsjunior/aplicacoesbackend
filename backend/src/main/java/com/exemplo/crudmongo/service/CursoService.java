@@ -2,6 +2,11 @@ package com.exemplo.crudmongo.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -58,5 +63,36 @@ public class CursoService {
      */
     public void excluir(Long id) {
         repository.deleteById(id);
+    }
+
+    public Page<Curso> buscarAvancado(String nome,
+                                      Integer cargaHorariaMin,
+                                      Integer cargaHorariaMax,
+                                      Boolean ativo,
+                                      int page,
+                                      int size,
+                                      String sortBy,
+                                      String direction) {
+        Sort sort = "desc".equalsIgnoreCase(direction)
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<Curso> spec = Specification.where(null);
+
+        if (nome != null && !nome.isBlank()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
+        }
+        if (cargaHorariaMin != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMin));
+        }
+        if (cargaHorariaMax != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMax));
+        }
+        if (ativo != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("ativo"), ativo));
+        }
+
+        return repository.findAll(spec, pageable);
     }
 }

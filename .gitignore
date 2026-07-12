@@ -85,3 +85,4 @@ ci-artifacts/
 # Se quiser versionar um exemplo de configuração, mantenha um arquivo de exemplo:
 # application.properties.example
 backend/src/main/java/com/exemplo/crudmongo/index.html
+backend/pom.txt.xml

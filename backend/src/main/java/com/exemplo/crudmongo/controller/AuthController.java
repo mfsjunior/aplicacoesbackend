@@ -1,7 +1,9 @@
 package com.exemplo.crudmongo.controller;
 
 import com.exemplo.crudmongo.config.JwtUtil;
+import com.exemplo.crudmongo.dto.UsuarioResumoDTO;
 import com.exemplo.crudmongo.service.UsuarioService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,6 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @PreAuthorize("hasRole('PROFESSOR')")
     public Map<String, String> register(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
@@ -56,5 +60,31 @@ public class AuthController {
         }
         usuarioService.salvarUsuario(username, password, role);
         return Map.of("message", "Usuário registrado com sucesso");
+    }
+
+    @PostMapping("/register-aluno")
+    public Map<String, String> registerAluno(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String password = body.get("password");
+        usuarioService.registrarAluno(username, password);
+        return Map.of("message", "Aluno registrado com sucesso", "role", "ALUNO");
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('PROFESSOR', 'ALUNO')")
+    public Map<String, String> me(Authentication authentication) {
+        String username = authentication.getName();
+        String role = authentication.getAuthorities().stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("USER");
+
+        return Map.of("username", username, "role", role);
+    }
+
+    @GetMapping("/usuarios")
+    @PreAuthorize("hasRole('PROFESSOR')")
+    public List<UsuarioResumoDTO> listarUsuarios() {
+        return usuarioService.listarUsuariosResumo();
     }
 }

@@ -28,6 +28,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // rotas públicas
                 .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/register-aluno").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 // apenas PROFESSOR pode registrar novos usuários
                 .requestMatchers("/api/auth/register").hasRole("PROFESSOR")

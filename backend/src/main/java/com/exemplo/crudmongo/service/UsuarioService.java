@@ -1,6 +1,7 @@
 package com.exemplo.crudmongo.service;
 
 import com.exemplo.crudmongo.Model.Usuario;
+import com.exemplo.crudmongo.dto.UsuarioResumoDTO;
 import com.exemplo.crudmongo.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -31,7 +34,20 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario salvarUsuario(String username, String password, String role) {
+        if (usuarioRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Username já cadastrado");
+        }
         Usuario usuario = new Usuario(username, passwordEncoder.encode(password), role);
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario registrarAluno(String username, String password) {
+        return salvarUsuario(username, password, "ALUNO");
+    }
+
+    public List<UsuarioResumoDTO> listarUsuariosResumo() {
+        return usuarioRepository.findAllByOrderByUsernameAsc().stream()
+                .map(usuario -> new UsuarioResumoDTO(usuario.getUsername(), usuario.getRole()))
+                .toList();
     }
 }

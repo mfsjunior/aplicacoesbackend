@@ -16,6 +16,8 @@ Cada etapa nova nasce da etapa anterior, preservando continuidade.
 7. `branch-7-roles-professor-aluno`
 8. `branch-8-microservicos`
 
+Observacao: a etapa 6 (pessoa-curso-separados) foi absorvida nas evolucoes anteriores da stack.
+
 ## Como usar cada branch
 
 ### 1. branch-1-monolito-basico
@@ -48,6 +50,17 @@ git checkout branch-N-nome-da-etapa
 cd backend
 mvn spring-boot:run
 ```
+
+### 8. branch-8-microservicos
+
+Transição para arquitetura de microserviços com gateway e serviços de domínio.
+
+```bash
+git checkout branch-8-microservicos
+docker compose -f docker-compose.microservicos.yml up --build
+```
+
+Gateway disponível em `http://localhost:8080/gateway`.
 
 ## Regra de criação de novas etapas
 

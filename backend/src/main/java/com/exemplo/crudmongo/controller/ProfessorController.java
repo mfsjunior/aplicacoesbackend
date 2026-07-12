@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/professores")
+@RequestMapping({"/api/professores", "/professores"})
+@CrossOrigin(origins = "*")
 public class ProfessorController {
     @Autowired
     private ProfessorService service;

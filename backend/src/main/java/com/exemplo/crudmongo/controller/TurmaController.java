@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/turmas")
+@RequestMapping({"/api/turmas", "/turmas"})
+@CrossOrigin(origins = "*")
 public class TurmaController {
     @Autowired
     private TurmaService service;

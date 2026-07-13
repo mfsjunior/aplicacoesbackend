@@ -1,73 +1,17 @@
-# CRUD Fullstack - Guia Geral de Testes (Postman)
+# CRUD Fullstack - README Geral da Aplicacao
 
-Este documento e o passo a passo oficial para o aluno testar a aplicacao inteira.
-A evolucao do projeto foi feita em stack, onde cada branch nasce da anterior.
+Este e o guia geral completo do projeto.
+A ideia e simples: voce comeca no monolito basico e evolui o sistema branch por branch.
+Cada branch representa um evento (uma etapa de evolucao) do mesmo codigo.
 
-## Versao curta para entrega academica
-
-Use este roteiro rapido para apresentar a validacao da aplicacao em aula.
-
-### Objetivo
-
-Demonstrar que:
-
-1. Autenticacao e autorizacao por perfil funcionam.
-2. CRUD e consultas avancadas funcionam em todas as entidades.
-3. A evolucao final para microservicos funciona com gateway.
-
-### Branch usada para validacao principal
-
-`branch-7-roles-professor-aluno`
-
-### Evidencias minimas obrigatorias no Postman
-
-1. Login professor e login aluno em `/api/auth/login`.
-2. Perfil logado em `/api/auth/me` com os dois tokens.
-3. Com token do professor:
-  - Criar 1 registro em cada entidade.
-  - Atualizar 1 registro de cada entidade.
-  - Excluir 1 registro de cada entidade.
-4. Com token do aluno:
-  - Listar entidades (`GET`).
-  - Tentar `POST` e comprovar `403`.
-5. Executar pelo menos 1 consulta avancada (`/busca`) em cada entidade.
-6. Testar `/api/auth/usuarios` com professor (sucesso) e aluno (403).
-
-### Evidencia da etapa de microservicos
-
-Branch: `branch-8-microservicos`
-
-1. Subir stack:
-
-```bash
-git checkout branch-8-microservicos
-docker compose -f docker-compose.microservicos.yml up --build
-```
-
-2. Testar no Postman:
-  - `GET http://localhost:8080/gateway/matriculas`
-  - `GET http://localhost:8081/api/matriculas`
-  - `GET http://localhost:8081/api/matriculas/{id}/detalhada`
-
-### O que entregar
-
-1. Export da Collection do Postman.
-2. Export do Environment do Postman.
-3. Capturas de tela dos requests obrigatorios acima.
-4. Link da branch validada no GitHub.
-
----
-
-A partir daqui esta o guia detalhado completo.
-
-## 1. Ordem das branches (evolucao)
+## 1. Linha do tempo da evolucao
 
 1. `branch-1-monolito-basico`
 2. `branch-2-alteracao-banco-dados`
 3. `branch-3-consultas-avancadas`
 4. `branch-4-auth-jwt`
 5. `branch-5-entidades-avancadas`
-6. `branch-6-pessoa-curso-separados` (absorvida nas anteriores)
+6. `branch-6-pessoa-curso-separados` (absorvida; sem ganho adicional isolado)
 7. `branch-7-roles-professor-aluno`
 8. `branch-8-microservicos`
 
@@ -75,14 +19,118 @@ A partir daqui esta o guia detalhado completo.
 
 - Java 17+
 - Maven 3.9+
-- Docker Desktop (para etapa de microservicos)
+- Docker Desktop (etapa 8)
 - Postman
 
-## 3. Teste completo da aplicacao (branch 7 - monolito)
+## 3. Como testar por evento (branch a branch)
 
-A branch 7 e a melhor para validar todas as entidades com autenticacao e regras de perfil.
+## Evento 1 - Monolito basico
 
-### 3.1 Subir a aplicacao
+Branch: `branch-1-monolito-basico`
+
+Objetivo:
+- Subir backend monolitico e validar CRUD base.
+
+Execucao:
+
+```bash
+git checkout branch-1-monolito-basico
+cd backend
+mvn spring-boot:run
+```
+
+Teste minimo no Postman:
+- Validar `GET` e `POST` de Pessoa e Curso.
+
+## Evento 2 - Alteracao de banco de dados
+
+Branch: `branch-2-alteracao-banco-dados`
+
+Objetivo:
+- Validar migracao para banco relacional e persistencia via JPA.
+
+Execucao:
+
+```bash
+git checkout branch-2-alteracao-banco-dados
+cd backend
+mvn spring-boot:run
+```
+
+Teste minimo no Postman:
+- Criar, listar, atualizar e excluir em pelo menos 2 entidades.
+
+## Evento 3 - Consultas avancadas
+
+Branch: `branch-3-consultas-avancadas`
+
+Objetivo:
+- Validar filtros, paginacao e ordenacao em todas as entidades.
+
+Execucao:
+
+```bash
+git checkout branch-3-consultas-avancadas
+cd backend
+mvn spring-boot:run
+```
+
+Teste minimo no Postman:
+- Chamar endpoint `/busca` de todas as entidades de dominio.
+
+## Evento 4 - Auth JWT
+
+Branch: `branch-4-auth-jwt`
+
+Objetivo:
+- Validar login JWT e protecao de rotas.
+
+Execucao:
+
+```bash
+git checkout branch-4-auth-jwt
+cd backend
+mvn spring-boot:run
+```
+
+Teste minimo no Postman:
+- Login em `/api/auth/login`
+- Usar token em rotas protegidas
+
+## Evento 5 - Entidades avancadas
+
+Branch: `branch-5-entidades-avancadas`
+
+Objetivo:
+- Validar constraints e validacoes (`@Valid`) nas entidades.
+
+Execucao:
+
+```bash
+git checkout branch-5-entidades-avancadas
+cd backend
+mvn spring-boot:run
+```
+
+Teste minimo no Postman:
+- Enviar payload invalido e confirmar erro de validacao.
+
+## Evento 6 - Pessoa/Curso separados
+
+Branch: `branch-6-pessoa-curso-separados`
+
+Observacao:
+- Esta etapa foi absorvida pelas evolucoes anteriores no fluxo atual.
+- Siga para o evento 7.
+
+## Evento 7 - Roles Professor/Aluno
+
+Branch: `branch-7-roles-professor-aluno`
+
+Objetivo:
+- Validar regras de autorizacao por papel.
+
+Execucao:
 
 ```bash
 git checkout branch-7-roles-professor-aluno
@@ -90,293 +138,49 @@ cd backend
 mvn spring-boot:run
 ```
 
-Backend sobe em `http://localhost:8080`.
+Teste minimo no Postman:
+1. Login professor e aluno em `/api/auth/login`.
+2. `GET /api/auth/me` com os dois tokens.
+3. Com aluno, tentar `POST` e validar `403`.
+4. Com professor, validar CRUD completo.
 
-### 3.2 Criar ambiente no Postman
+## Evento 8 - Microservicos
 
-Crie um Environment chamado `crud-local` com as variaveis:
+Branch: `branch-8-microservicos`
 
-- `baseUrl = http://localhost:8080`
-- `tokenProfessor = `
-- `tokenAluno = `
+Objetivo:
+- Validar arquitetura com gateway e servicos separados.
 
-### 3.3 Autenticacao (ordem recomendada)
-
-#### A) Login como professor (usuario seed)
-
-Request:
-
-- Metodo: `POST`
-- URL: `{{baseUrl}}/api/auth/login`
-- Body JSON:
-
-```json
-{
-  "username": "professor",
-  "password": "prof123"
-}
-```
-
-Copie o `token` da resposta para `tokenProfessor`.
-
-#### B) Login como aluno (usuario seed)
-
-Request:
-
-- Metodo: `POST`
-- URL: `{{baseUrl}}/api/auth/login`
-- Body JSON:
-
-```json
-{
-  "username": "aluno",
-  "password": "aluno123"
-}
-```
-
-Copie o `token` da resposta para `tokenAluno`.
-
-#### C) Cadastro publico de aluno
-
-Request:
-
-- Metodo: `POST`
-- URL: `{{baseUrl}}/api/auth/register-aluno`
-- Body JSON:
-
-```json
-{
-  "username": "aluno_teste",
-  "password": "aluno123"
-}
-```
-
-### 3.4 Headers padrao por perfil
-
-Para requests protegidos:
-
-- Professor: `Authorization: Bearer {{tokenProfessor}}`
-- Aluno: `Authorization: Bearer {{tokenAluno}}`
-
-## 4. Matriz de testes por entidade (branch 7)
-
-Regra geral de autorizacao:
-
-- `GET`: ALUNO e PROFESSOR
-- `POST`, `PUT`, `DELETE`: somente PROFESSOR
-
-### 4.1 Pessoa
-
-Base: `{{baseUrl}}/api/pessoas`
-
-Payload exemplo:
-
-```json
-{
-  "nome": "Ana Souza",
-  "idade": 21,
-  "email": "ana.souza@example.com",
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/pessoas` (professor)
-2. `GET /api/pessoas` (professor e aluno)
-3. `PUT /api/pessoas/{id}` (professor)
-4. `GET /api/pessoas/busca?nome=ana&page=0&size=10&sortBy=nome&direction=asc`
-5. `DELETE /api/pessoas/{id}` (professor)
-
-### 4.2 Curso
-
-Base: `{{baseUrl}}/api/curso`
-
-Payload exemplo:
-
-```json
-{
-  "nome": "Engenharia de Software",
-  "cargaHoraria": 3200,
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/curso`
-2. `GET /api/curso`
-3. `PUT /api/curso/{id}`
-4. `GET /api/curso/busca?nome=engenharia&cargaHorariaMin=1000`
-5. `DELETE /api/curso/{id}`
-
-### 4.3 Professor
-
-Base: `{{baseUrl}}/api/professores`
-
-Payload exemplo:
-
-```json
-{
-  "nome": "Carlos Lima",
-  "idade": 40,
-  "email": "carlos.lima@example.com",
-  "area": "Matematica",
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/professores`
-2. `GET /api/professores`
-3. `PUT /api/professores/{id}`
-4. `GET /api/professores/busca?area=matematica&ativo=true`
-5. `DELETE /api/professores/{id}`
-
-### 4.4 Disciplina
-
-Base: `{{baseUrl}}/api/disciplinas`
-
-Payload exemplo:
-
-```json
-{
-  "nome": "Calculo I",
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/disciplinas`
-2. `GET /api/disciplinas`
-3. `PUT /api/disciplinas/{id}`
-4. `GET /api/disciplinas/busca?nome=calculo`
-5. `DELETE /api/disciplinas/{id}`
-
-### 4.5 Turma
-
-Base: `{{baseUrl}}/api/turmas`
-
-Payload exemplo:
-
-```json
-{
-  "nome": "Turma A",
-  "ano": 2026,
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/turmas`
-2. `GET /api/turmas`
-3. `PUT /api/turmas/{id}`
-4. `GET /api/turmas/busca?anoMin=2025&anoMax=2026`
-5. `DELETE /api/turmas/{id}`
-
-### 4.6 Matricula
-
-Base: `{{baseUrl}}/api/matriculas`
-
-Payload exemplo:
-
-```json
-{
-  "pessoaId": 1,
-  "cursoId": 1,
-  "dataMatricula": "2026-07-12",
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/matriculas`
-2. `GET /api/matriculas`
-3. `PUT /api/matriculas/{id}`
-4. `GET /api/matriculas/busca?pessoaId=1&cursoId=1`
-5. `DELETE /api/matriculas/{id}`
-
-### 4.7 Avaliacao
-
-Base: `{{baseUrl}}/api/avaliacoes`
-
-Payload exemplo:
-
-```json
-{
-  "pessoaId": 1,
-  "disciplinaId": 1,
-  "nota": 8.5,
-  "data": "2026-07-12",
-  "ativo": true
-}
-```
-
-Testes:
-
-1. `POST /api/avaliacoes`
-2. `GET /api/avaliacoes`
-3. `PUT /api/avaliacoes/{id}`
-4. `GET /api/avaliacoes/busca?notaMin=7&notaMax=10`
-5. `DELETE /api/avaliacoes/{id}`
-
-## 5. Testes de perfil (obrigatorio)
-
-### 5.1 Endpoint de perfil logado
-
-- `GET {{baseUrl}}/api/auth/me`
-- Testar com `tokenProfessor` e `tokenAluno`.
-
-### 5.2 Listagem de usuarios (somente professor)
-
-- `GET {{baseUrl}}/api/auth/usuarios`
-- Com `tokenProfessor`: deve retornar lista.
-- Com `tokenAluno`: deve retornar `403`.
-
-### 5.3 Verificacao de autorizacao por entidade
-
-Tente executar `POST` em qualquer entidade com `tokenAluno`.
-Esperado: `403 Forbidden`.
-
-## 6. Teste da etapa microservicos (branch 8)
-
-A etapa 8 adiciona gateway e servicos separados.
-
-### 6.1 Subir stack de microservicos
+Execucao:
 
 ```bash
 git checkout branch-8-microservicos
 docker compose -f docker-compose.microservicos.yml up --build
 ```
 
-### 6.2 Endpoints principais para validar no Postman
-
-Gateway:
-
+Teste minimo no Postman:
 - `GET http://localhost:8080/gateway/matriculas`
-
-Servico de matricula direto:
-
 - `GET http://localhost:8081/api/matriculas`
-- `POST http://localhost:8081/api/matriculas`
 - `GET http://localhost:8081/api/matriculas/{id}/detalhada`
 
-Observacao importante:
+## 4. Roteiro unico de validacao completa (sugestao de aula)
 
-- Na etapa 8, o servico de matricula esta mais completo que os demais, e deve ser o foco da validacao funcional entre servicos.
+1. Executar evento 1.
+2. Executar evento 3.
+3. Executar evento 4.
+4. Executar evento 5.
+5. Executar evento 7 (foco principal de regras de acesso).
+6. Executar evento 8 (foco em gateway + matricula-service).
 
-## 7. Checklist final do aluno
+## 5. Checklist de entrega do aluno
 
-1. Conseguiu autenticar com professor e aluno.
-2. Validou regra de permissao (ALUNO nao cria/edita/exclui).
-3. Executou CRUD basico de todas as entidades na branch 7.
-4. Executou consultas avancadas (`/busca`) em todas as entidades.
-5. Validou endpoint `/api/auth/me`.
-6. Validou endpoint `/api/auth/usuarios` com controle de acesso.
-7. Subiu branch 8 e testou gateway + matricula-service.
+1. Collection do Postman exportada.
+2. Environment do Postman exportado.
+3. Evidencias de resposta dos endpoints obrigatorios.
+4. Link da branch testada.
+5. Breve resumo do que mudou de um evento para o outro.
 
-Se todos os itens acima passaram, a aplicacao foi testada de ponta a ponta no escopo do projeto.
+---
+
+Este README e geral, completo e orientado por eventos de branch.
+Para detalhes tecnicos internos, consulte os documentos da pasta `diagramas`.

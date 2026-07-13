@@ -15,9 +15,10 @@ Sequencia usada:
 3. `branch-3-consultas-avancadas`
 4. `branch-4-auth-jwt`
 5. `branch-5-entidades-avancadas`
-6. `branch-6-pessoa-curso-separados` (na pratica foi absorvida pelas etapas anteriores)
+6. `branch-6-handlers-tratamento-erros`
 7. `branch-7-roles-professor-aluno`
 8. `branch-8-microservicos`
+9. `branch-9-comunicacao-microservicos-resiliencia`
 
 ## Matriz unica de validacao por branch
 
@@ -28,9 +29,10 @@ Sequencia usada:
 | `branch-3-consultas-avancadas` | Validar filtros, paginacao e ordenacao nas buscas. | `GET /api/pessoas/busca?...`, `GET /api/curso/busca?...`, `GET /api/avaliacao/busca?...` | Resultado paginado com metadados (`page`, `size`, ordenacao). |
 | `branch-4-auth-jwt` | Garantir autenticacao JWT e acesso protegido. | `POST /api/auth/login`, `GET /api/pessoas` com token | Token retornado no login e acesso autorizado com Bearer. |
 | `branch-5-entidades-avancadas` | Validar regras de dominio e Bean Validation. | `POST /api/pessoas` invalido, `POST /api/professor` invalido | Erros de validacao com status 400 e mensagens de campo. |
-| `branch-6-pessoa-curso-separados` | Revalidar estabilidade da etapa intermediaria. | Repetir `CRUD` e `/busca` de Pessoa e Curso | Mesmo comportamento funcional das etapas 3 e 5. |
+| `branch-6-handlers-tratamento-erros` | Padronizar tratamento de excecoes da API. | Requisicao invalida (`400`), recurso inexistente (`404`), erro interno (`500`) | Corpo de erro padronizado com status, mensagem e timestamp. |
 | `branch-7-roles-professor-aluno` | Confirmar autorizacao por perfil (ALUNO x PROFESSOR). | `POST /api/auth/register-aluno`, `GET /api/auth/usuarios`, `POST /api/pessoas` com token ALUNO | `GET /usuarios` permitido para professor e `403` para operacao de escrita com aluno. |
 | `branch-8-microservicos` | Validar gateway + servicos de matricula em arquitetura distribuida. | `GET /gateway/matriculas`, `POST /gateway/matriculas`, `GET /api/matriculas/{id}/detalhada` | Resposta via gateway e resposta detalhada do servico de matricula. |
+| `branch-9-comunicacao-microservicos-resiliencia` | Validar comunicacao entre servicos e degradacao controlada. | Chamada entre servicos (ex: matricula -> pessoa/curso), teste com um servico fora do ar | API responde erro amigavel (`503`) sem quebrar o gateway inteiro. |
 
 ## 2. Mapa tecnico do backend
 
@@ -209,17 +211,19 @@ Endpoints de teste (branch 5):
 5. `POST /api/avaliacao` (validar faixa de nota)
 6. `PUT /api/pessoas/{id}` com payload invalido (esperado `400`)
 
-## Branch 6 - Pessoa/Curso separados
+## Branch 6 - Handlers e tratamento de erros
 
-Observacao tecnica:
+Mudanca tecnica relevante:
 
-- No fluxo real desta stack, essa etapa nao introduziu ganho isolado adicional.
-- Separacao funcional de Pessoa/Curso ja estava contemplada nas etapas anteriores.
+- Inclusao de `GlobalExceptionHandler` com `@ControllerAdvice`.
+- Padronizacao de respostas de erro para validacao, negocio e erro inesperado.
+- Melhor rastreabilidade para cliente e logs do backend.
 
 Endpoints de teste (branch 6):
 
-1. Repetir os testes de CRUD de Pessoa e Curso da branch 5.
-2. Repetir os testes de busca da branch 3 para Pessoa e Curso.
+1. `POST /api/pessoas` com payload invalido (esperado `400`).
+2. `GET /api/pessoas/{id}` inexistente (esperado `404`).
+3. Forcar erro interno de teste (esperado `500` com payload padronizado).
 
 ## Branch 7 - Roles Professor/Aluno
 
@@ -285,6 +289,34 @@ Endpoints de teste (branch 8):
 4. `GET http://localhost:8081/api/matriculas`
 5. `GET http://localhost:8081/api/matriculas/{id}/detalhada`
 
+## Branch 9 - Comunicacao entre microservicos e resiliencia
+
+Mudanca tecnica relevante:
+
+- Comunicacao entre servicos via HTTP entre dominios (ex: matricula consultando pessoa/curso/turma).
+- Tratamento de indisponibilidade de servico remoto com resposta controlada.
+- Evita falha em cascata no gateway e melhora observabilidade de erros distribuidos.
+
+Arquivos/areas chave:
+
+- `microservicos/*/service/*Service.java`
+- `microservicos/*/controller/*Controller.java`
+- `microservicos/*/error/GlobalExceptionHandler.java`
+- `gateway-service/src/main/java/**`
+
+Execucao:
+
+```bash
+git checkout branch-9-comunicacao-microservicos-resiliencia
+docker compose -f docker-compose.microservicos.yml up --build
+```
+
+Endpoints de teste (branch 9):
+
+1. `GET http://localhost:8080/gateway/matriculas/{id}/detalhada` (com servicos no ar).
+2. Derrubar um servico dependente (ex: pessoa/curso) e repetir chamada detalhada.
+3. Validar retorno `503` com mensagem de indisponibilidade do servico remoto.
+
 ## 4. Teste geral no Postman (resumo objetivo)
 
 ## Monolito (branch 7)
@@ -301,6 +333,12 @@ Endpoints de teste (branch 8):
 1. `GET http://localhost:8080/gateway/matriculas`.
 2. `GET http://localhost:8081/api/matriculas`.
 3. `GET http://localhost:8081/api/matriculas/{id}/detalhada`.
+
+## Comunicacao e resiliencia (branch 9)
+
+1. `GET http://localhost:8080/gateway/matriculas/{id}/detalhada` com todos os servicos ativos.
+2. Parar um servico dependente e repetir a chamada.
+3. Validar retorno controlado (`503`) sem derrubar os demais endpoints.
 
 ## 5. Entrega recomendada do aluno
 

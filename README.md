@@ -66,6 +66,15 @@ $env:MONGODB_URI="mongodb+srv://<usuario>:<senha>@<cluster>/<database>?retryWrit
 mvn spring-boot:run
 ```
 
+Endpoints de teste (branch 1):
+
+1. `GET /pessoas`
+2. `POST /pessoas`
+3. `PUT /pessoas/{id}`
+4. `DELETE /pessoas/{id}`
+5. `GET /curso`
+6. `POST /curso`
+
 ## Branch 2 - Alteracao de banco de dados
 
 Evento esperado:
@@ -83,6 +92,15 @@ git checkout branch-2-alteracao-banco-dados
 cd backend
 mvn spring-boot:run
 ```
+
+Endpoints de teste (branch 2):
+
+1. `GET /api/pessoas`
+2. `POST /api/pessoas`
+3. `GET /api/curso`
+4. `POST /api/curso`
+5. `GET /api/professor`
+6. `GET /api/disciplina`
 
 ## Branch 3 - Consultas avancadas
 
@@ -107,6 +125,16 @@ cd backend
 mvn spring-boot:run
 ```
 
+Endpoints de teste (branch 3):
+
+1. `GET /api/pessoas/busca?nome=Ana&page=0&size=10&sort=nome,asc`
+2. `GET /api/curso/busca?nome=Engenharia&page=0&size=10`
+3. `GET /api/professor/busca?nome=Joao&page=0&size=10`
+4. `GET /api/disciplina/busca?nome=Calculo&page=0&size=10`
+5. `GET /api/turma/busca?nome=Turma A&page=0&size=10`
+6. `GET /api/matricula/busca?page=0&size=10`
+7. `GET /api/avaliacao/busca?page=0&size=10`
+
 ## Branch 4 - Auth JWT
 
 Mudanca tecnica relevante:
@@ -127,6 +155,14 @@ git checkout branch-4-auth-jwt
 cd backend
 mvn spring-boot:run
 ```
+
+Endpoints de teste (branch 4):
+
+1. `POST /api/auth/login`
+2. `POST /api/auth/register`
+3. `GET /api/pessoas` (com token)
+4. `POST /api/pessoas` (com token)
+5. `GET /api/curso/busca?page=0&size=10` (com token)
 
 ## Branch 5 - Entidades avancadas
 
@@ -149,12 +185,26 @@ cd backend
 mvn spring-boot:run
 ```
 
+Endpoints de teste (branch 5):
+
+1. `POST /api/pessoas` (validar `nome`, `email`, `idade`)
+2. `POST /api/professor` (validar campos obrigatorios)
+3. `POST /api/disciplina` (validar `nome` e carga)
+4. `POST /api/turma` (validar `nome` e ano)
+5. `POST /api/avaliacao` (validar faixa de nota)
+6. `PUT /api/pessoas/{id}` com payload invalido (esperado `400`)
+
 ## Branch 6 - Pessoa/Curso separados
 
 Observacao tecnica:
 
 - No fluxo real desta stack, essa etapa nao introduziu ganho isolado adicional.
 - Separacao funcional de Pessoa/Curso ja estava contemplada nas etapas anteriores.
+
+Endpoints de teste (branch 6):
+
+1. Repetir os testes de CRUD de Pessoa e Curso da branch 5.
+2. Repetir os testes de busca da branch 3 para Pessoa e Curso.
 
 ## Branch 7 - Roles Professor/Aluno
 
@@ -181,6 +231,15 @@ cd backend
 mvn spring-boot:run
 ```
 
+Endpoints de teste (branch 7):
+
+1. `POST /api/auth/login` (professor)
+2. `POST /api/auth/login` (aluno)
+3. `POST /api/auth/register-aluno`
+4. `GET /api/auth/me` (com token)
+5. `GET /api/auth/usuarios` (somente professor)
+6. `POST /api/pessoas` com token de aluno (esperado `403`)
+
 ## Branch 8 - Microservicos
 
 Mudanca tecnica relevante:
@@ -202,6 +261,14 @@ Execucao:
 git checkout branch-8-microservicos
 docker compose -f docker-compose.microservicos.yml up --build
 ```
+
+Endpoints de teste (branch 8):
+
+1. `GET http://localhost:8080/gateway/matriculas`
+2. `GET http://localhost:8080/gateway/matriculas/{id}`
+3. `POST http://localhost:8080/gateway/matriculas`
+4. `GET http://localhost:8081/api/matriculas`
+5. `GET http://localhost:8081/api/matriculas/{id}/detalhada`
 
 ## 4. Teste geral no Postman (resumo objetivo)
 

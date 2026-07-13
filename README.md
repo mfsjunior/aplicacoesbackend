@@ -72,6 +72,8 @@ Base tecnica observada:
 
 Execucao:
 
+Antes de executar, crie uma conta no MongoDB Atlas, crie um cluster e copie a URI de conexao (Connect > Drivers) para usar na variavel `MONGODB_URI`.
+
 ```bash
 git checkout branch-1-monolito-basico
 cd backend

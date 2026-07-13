@@ -3,6 +3,63 @@
 Este documento e o passo a passo oficial para o aluno testar a aplicacao inteira.
 A evolucao do projeto foi feita em stack, onde cada branch nasce da anterior.
 
+## Versao curta para entrega academica
+
+Use este roteiro rapido para apresentar a validacao da aplicacao em aula.
+
+### Objetivo
+
+Demonstrar que:
+
+1. Autenticacao e autorizacao por perfil funcionam.
+2. CRUD e consultas avancadas funcionam em todas as entidades.
+3. A evolucao final para microservicos funciona com gateway.
+
+### Branch usada para validacao principal
+
+`branch-7-roles-professor-aluno`
+
+### Evidencias minimas obrigatorias no Postman
+
+1. Login professor e login aluno em `/api/auth/login`.
+2. Perfil logado em `/api/auth/me` com os dois tokens.
+3. Com token do professor:
+  - Criar 1 registro em cada entidade.
+  - Atualizar 1 registro de cada entidade.
+  - Excluir 1 registro de cada entidade.
+4. Com token do aluno:
+  - Listar entidades (`GET`).
+  - Tentar `POST` e comprovar `403`.
+5. Executar pelo menos 1 consulta avancada (`/busca`) em cada entidade.
+6. Testar `/api/auth/usuarios` com professor (sucesso) e aluno (403).
+
+### Evidencia da etapa de microservicos
+
+Branch: `branch-8-microservicos`
+
+1. Subir stack:
+
+```bash
+git checkout branch-8-microservicos
+docker compose -f docker-compose.microservicos.yml up --build
+```
+
+2. Testar no Postman:
+  - `GET http://localhost:8080/gateway/matriculas`
+  - `GET http://localhost:8081/api/matriculas`
+  - `GET http://localhost:8081/api/matriculas/{id}/detalhada`
+
+### O que entregar
+
+1. Export da Collection do Postman.
+2. Export do Environment do Postman.
+3. Capturas de tela dos requests obrigatorios acima.
+4. Link da branch validada no GitHub.
+
+---
+
+A partir daqui esta o guia detalhado completo.
+
 ## 1. Ordem das branches (evolucao)
 
 1. `branch-1-monolito-basico`

@@ -1,35 +1,60 @@
-# CRUD Fullstack - README Geral da Aplicacao
+# CRUD Fullstack - README Geral (Engenharia Reversa por Branch)
 
-Este e o guia geral completo do projeto.
-A ideia e simples: voce comeca no monolito basico e evolui o sistema branch por branch.
-Cada branch representa um evento (uma etapa de evolucao) do mesmo codigo.
+Este documento descreve tecnicamente o que acontece em cada branch da evolucao.
+A leitura correta e sequencial: voce comeca no monolito basico e avanca evento por evento.
 
-## 1. Linha do tempo da evolucao
+## 1. Regra do projeto
+
+Cada branch representa um evento de evolucao.
+A branch seguinte sempre herda a anterior e adiciona mudancas novas.
+
+Sequencia usada:
 
 1. `branch-1-monolito-basico`
 2. `branch-2-alteracao-banco-dados`
 3. `branch-3-consultas-avancadas`
 4. `branch-4-auth-jwt`
 5. `branch-5-entidades-avancadas`
-6. `branch-6-pessoa-curso-separados` (absorvida; sem ganho adicional isolado)
+6. `branch-6-pessoa-curso-separados` (na pratica foi absorvida pelas etapas anteriores)
 7. `branch-7-roles-professor-aluno`
 8. `branch-8-microservicos`
 
-## 2. Pre-requisitos
+## 2. Mapa tecnico do backend
 
-- Java 17+
-- Maven 3.9+
-- Docker Desktop (etapa 8)
-- Postman
+Pacote base atual:
 
-## 3. Como testar por evento (branch a branch)
+- `com.exemplo.crud`
 
-## Evento 1 - Monolito basico
+Camadas do monolito:
 
-Branch: `branch-1-monolito-basico`
+- `Model`
+- `repository`
+- `service`
+- `controller`
+- `config`
+- `dto`
 
-Objetivo:
-- Subir backend monolitico e validar CRUD base.
+Entidades principais:
+
+- Pessoa
+- Curso
+- Professor
+- Disciplina
+- Turma
+- Matricula
+- Avaliacao
+- Usuario
+
+## 3. O que cada branch adiciona (reversa tecnica)
+
+## Branch 1 - Monolito basico
+
+Base tecnica observada:
+
+- Aplicacao Spring Boot monolitica em `backend`.
+- Persistencia via Spring Data JPA e banco H2 em memoria.
+- Estrutura em camadas completa para entidades do dominio.
+- Endpoints REST de CRUD ja presentes para as entidades principais.
 
 Execucao:
 
@@ -39,15 +64,15 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-- Validar `GET` e `POST` de Pessoa e Curso.
+## Branch 2 - Alteracao de banco de dados
 
-## Evento 2 - Alteracao de banco de dados
+Evento esperado:
 
-Branch: `branch-2-alteracao-banco-dados`
+- Consolidacao do backend com banco relacional e configuracoes de persistencia.
 
-Objetivo:
-- Validar migracao para banco relacional e persistencia via JPA.
+Indicador tecnico:
+
+- Mantem base JPA/H2 consolidada e estrutura para evolucoes seguintes.
 
 Execucao:
 
@@ -57,15 +82,20 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-- Criar, listar, atualizar e excluir em pelo menos 2 entidades.
+## Branch 3 - Consultas avancadas
 
-## Evento 3 - Consultas avancadas
+Mudanca tecnica relevante:
 
-Branch: `branch-3-consultas-avancadas`
+- Repositorios passam a usar `JpaSpecificationExecutor`.
+- Services ganham busca dinamica com `Specification`.
+- Controllers expõem rotas `/busca` com filtros opcionais.
+- Suporte a paginacao e ordenacao em todas as entidades de dominio.
 
-Objetivo:
-- Validar filtros, paginacao e ordenacao em todas as entidades.
+Arquivos/areas chave:
+
+- `repository/*Repository.java`
+- `service/*Service.java`
+- `controller/*Controller.java`
 
 Execucao:
 
@@ -75,15 +105,18 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-- Chamar endpoint `/busca` de todas as entidades de dominio.
+## Branch 4 - Auth JWT
 
-## Evento 4 - Auth JWT
+Mudanca tecnica relevante:
 
-Branch: `branch-4-auth-jwt`
+- Padronizacao das rotas de dominio com base `/api`.
+- Homogeneizacao de acesso com regras de seguranca por metodo HTTP.
+- Integracao consistente com filtro JWT ja existente.
 
-Objetivo:
-- Validar login JWT e protecao de rotas.
+Arquivos/areas chave:
+
+- `config/SecurityConfig.java`
+- `controller/*Controller.java`
 
 Execucao:
 
@@ -93,16 +126,18 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-- Login em `/api/auth/login`
-- Usar token em rotas protegidas
+## Branch 5 - Entidades avancadas
 
-## Evento 5 - Entidades avancadas
+Mudanca tecnica relevante:
 
-Branch: `branch-5-entidades-avancadas`
+- Entidades recebem constraints de coluna e validacoes Bean Validation.
+- Controllers passam a validar payload com `@Valid` nos endpoints de escrita.
+- Regras de dominio ficam mais estritas no modelo (tamanho, formato, faixa).
 
-Objetivo:
-- Validar constraints e validacoes (`@Valid`) nas entidades.
+Arquivos/areas chave:
+
+- `Model/*.java`
+- `controller/*Controller.java`
 
 Execucao:
 
@@ -112,23 +147,29 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-- Enviar payload invalido e confirmar erro de validacao.
+## Branch 6 - Pessoa/Curso separados
 
-## Evento 6 - Pessoa/Curso separados
+Observacao tecnica:
 
-Branch: `branch-6-pessoa-curso-separados`
+- No fluxo real desta stack, essa etapa nao introduziu ganho isolado adicional.
+- Separacao funcional de Pessoa/Curso ja estava contemplada nas etapas anteriores.
 
-Observacao:
-- Esta etapa foi absorvida pelas evolucoes anteriores no fluxo atual.
-- Siga para o evento 7.
+## Branch 7 - Roles Professor/Aluno
 
-## Evento 7 - Roles Professor/Aluno
+Mudanca tecnica relevante:
 
-Branch: `branch-7-roles-professor-aluno`
+- Evolucao da camada de autenticacao/autorizacao por perfil.
+- Novos endpoints em auth para operacao por papel.
+- Cadastro publico de aluno e endpoint de perfil do usuario autenticado.
+- Listagem de usuarios resumida restrita a professor.
 
-Objetivo:
-- Validar regras de autorizacao por papel.
+Arquivos/areas chave:
+
+- `controller/AuthController.java`
+- `service/UsuarioService.java`
+- `repository/UsuarioRepository.java`
+- `dto/UsuarioResumoDTO.java`
+- `config/SecurityConfig.java`
 
 Execucao:
 
@@ -138,18 +179,20 @@ cd backend
 mvn spring-boot:run
 ```
 
-Teste minimo no Postman:
-1. Login professor e aluno em `/api/auth/login`.
-2. `GET /api/auth/me` com os dois tokens.
-3. Com aluno, tentar `POST` e validar `403`.
-4. Com professor, validar CRUD completo.
+## Branch 8 - Microservicos
 
-## Evento 8 - Microservicos
+Mudanca tecnica relevante:
 
-Branch: `branch-8-microservicos`
+- Introducao da estrutura `microservicos/*`.
+- Introducao de `gateway-service` para roteamento HTTP.
+- Compose dedicado para subir os servicos em conjunto.
+- `matricula-service` e o modulo mais completo na etapa de microservicos.
 
-Objetivo:
-- Validar arquitetura com gateway e servicos separados.
+Arquivos/areas chave:
+
+- `gateway-service/*`
+- `microservicos/*`
+- `docker-compose.microservicos.yml`
 
 Execucao:
 
@@ -158,29 +201,27 @@ git checkout branch-8-microservicos
 docker compose -f docker-compose.microservicos.yml up --build
 ```
 
-Teste minimo no Postman:
-- `GET http://localhost:8080/gateway/matriculas`
-- `GET http://localhost:8081/api/matriculas`
-- `GET http://localhost:8081/api/matriculas/{id}/detalhada`
+## 4. Teste geral no Postman (resumo objetivo)
 
-## 4. Roteiro unico de validacao completa (sugestao de aula)
+## Monolito (branch 7)
 
-1. Executar evento 1.
-2. Executar evento 3.
-3. Executar evento 4.
-4. Executar evento 5.
-5. Executar evento 7 (foco principal de regras de acesso).
-6. Executar evento 8 (foco em gateway + matricula-service).
+1. Login professor: `POST /api/auth/login`.
+2. Login aluno: `POST /api/auth/login`.
+3. Perfil logado: `GET /api/auth/me`.
+4. CRUD completo de todas as entidades com professor.
+5. Validar `403` ao tentar escrita com aluno.
+6. Executar `/busca` de todas as entidades.
 
-## 5. Checklist de entrega do aluno
+## Microservicos (branch 8)
+
+1. `GET http://localhost:8080/gateway/matriculas`.
+2. `GET http://localhost:8081/api/matriculas`.
+3. `GET http://localhost:8081/api/matriculas/{id}/detalhada`.
+
+## 5. Entrega recomendada do aluno
 
 1. Collection do Postman exportada.
 2. Environment do Postman exportado.
 3. Evidencias de resposta dos endpoints obrigatorios.
-4. Link da branch testada.
-5. Breve resumo do que mudou de um evento para o outro.
-
----
-
-Este README e geral, completo e orientado por eventos de branch.
-Para detalhes tecnicos internos, consulte os documentos da pasta `diagramas`.
+4. Link da branch validada.
+5. Resumo do que mudou em cada evento.

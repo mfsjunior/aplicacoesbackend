@@ -90,22 +90,79 @@ Para chegar ao gateway de forma logica:
 4. Configurar rotas no gateway
 5. Validar chamada via gateway para os endpoints das 2 entidades
 
-## Como copiar da ultima branch sem perder o aprendizado
+## Como copiar sem se perder no codigo
 
-Se a branch final ja estiver completa:
+A estrategia correta e trabalhar branch por branch usando o comando `git diff` para ver exatamente o que mudou entre uma etapa e a proxima. Voce copia apenas o que e novo, nao o arquivo inteiro.
 
-1. Nao copiar o repositorio inteiro de uma vez.
-2. Copiar por blocos de responsabilidade, na ordem:
-- model
-- repository
-- service
-- controller
-- seguranca
-- validacoes
-- microservicos
-- gateway
-3. A cada bloco copiado, subir aplicacao e testar antes de avancar.
-4. Registrar o que foi adaptado manualmente nas 2 entidades escolhidas.
+### Comando base
+
+```bash
+git diff branch-N branch-N+1 -- backend/src/main/java
+```
+
+Substitua `branch-N` e `branch-N+1` pelos nomes reais. Exemplos:
+
+```bash
+# Ver o que mudou do monolito basico para o banco relacional
+git diff branch-1-monolito-basico branch-2-alteracao-banco-dados -- backend/src/main/java
+
+# Ver o que mudou para consultas avancadas
+git diff branch-2-alteracao-banco-dados branch-3-consultas-avancadas -- backend/src/main/java
+
+# Ver o que mudou para auth JWT
+git diff branch-3-consultas-avancadas branch-4-auth-jwt -- backend/src/main/java
+
+# Ver o que mudou para entidades avancadas
+git diff branch-4-auth-jwt branch-5-entidades-avancadas -- backend/src/main/java
+
+# Ver o que mudou para roles
+git diff branch-5-entidades-avancadas branch-7-roles-professor-aluno -- backend/src/main/java
+
+# Ver o que mudou para microservicos
+git diff branch-7-roles-professor-aluno branch-8-microservicos
+```
+
+### Como ler o resultado do diff
+
+O terminal mostra linhas com um prefixo:
+
+- Linha com `+` (verde): codigo que foi ADICIONADO nessa etapa. Voce deve copiar isso.
+- Linha com `-` (vermelho): codigo que foi REMOVIDO ou ALTERADO. Voce deve ajustar no seu arquivo.
+- Linha sem prefixo: codigo que nao mudou. Nao precisa tocar.
+
+### Fluxo de copia por etapa
+
+Para cada etapa, faca assim:
+
+1. Rode o `git diff` entre a branch atual e a proxima.
+2. Leia apenas os arquivos que aparecem no resultado.
+3. Para cada arquivo alterado, copie somente as linhas marcadas com `+`.
+4. Suba a aplicacao e valide no Postman antes de avancar.
+5. Repita para a proxima etapa.
+
+### Ver apenas os nomes dos arquivos que mudaram
+
+Se o diff for muito grande, use `--name-status` para ver so a lista de arquivos:
+
+```bash
+git diff --name-status branch-3-consultas-avancadas branch-4-auth-jwt -- backend/src/main/java
+```
+
+Saida esperada:
+```
+M   backend/src/main/java/.../config/SecurityConfig.java
+M   backend/src/main/java/.../controller/PessoaController.java
+```
+
+Isso te diz quais arquivos abrir e onde buscar as mudancas.
+
+### Checkpoint obrigatorio antes de avancar
+
+Nao avance para a proxima branch sem validar estes pontos:
+
+1. Aplicacao sobe sem erro.
+2. Endpoints das 2 entidades escolhidas respondem corretamente.
+3. Comportamento novo da etapa esta funcionando (busca paginada, token, validacao, etc.).
 
 ## Critério minimo para aprovacao
 

@@ -1,5 +1,4 @@
-# CRUD Fullstack - README Geral (Engenharia Reversa por Branch)
-
+# CRUD Fullstack - README 
 Este documento descreve tecnicamente o que acontece em cada branch da evolucao.
 A leitura correta e sequencial: voce comeca no monolito basico e avanca evento por evento.
 
@@ -123,7 +122,7 @@ Mudanca tecnica relevante:
 
 - Repositorios passam a usar `JpaSpecificationExecutor`.
 - Services ganham busca dinamica com `Specification`.
-- Controllers expıem rotas `/busca` com filtros opcionais.
+- Controllers exp√µem rotas `/busca` com filtros opcionais.
 - Suporte a paginacao e ordenacao em todas as entidades de dominio.
 
 Arquivos/areas chave:

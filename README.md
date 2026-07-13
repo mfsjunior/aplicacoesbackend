@@ -19,6 +19,19 @@ Sequencia usada:
 7. `branch-7-roles-professor-aluno`
 8. `branch-8-microservicos`
 
+## Matriz unica de validacao por branch
+
+| Branch | Objetivo | Endpoints obrigatorios | Evidencia esperada |
+|---|---|---|---|
+| `branch-1-monolito-basico` | Subir monolito com MongoDB e validar CRUD inicial. | `GET /pessoas`, `POST /pessoas`, `GET /curso`, `POST /curso` | JSON de leitura e criacao funcionando com status 200/201. |
+| `branch-2-alteracao-banco-dados` | Consolidar persistencia relacional e rotas base `/api`. | `GET /api/pessoas`, `POST /api/pessoas`, `GET /api/curso` | Respostas com dados persistidos apos reinicio da aplicacao. |
+| `branch-3-consultas-avancadas` | Validar filtros, paginacao e ordenacao nas buscas. | `GET /api/pessoas/busca?...`, `GET /api/curso/busca?...`, `GET /api/avaliacao/busca?...` | Resultado paginado com metadados (`page`, `size`, ordenacao). |
+| `branch-4-auth-jwt` | Garantir autenticacao JWT e acesso protegido. | `POST /api/auth/login`, `GET /api/pessoas` com token | Token retornado no login e acesso autorizado com Bearer. |
+| `branch-5-entidades-avancadas` | Validar regras de dominio e Bean Validation. | `POST /api/pessoas` invalido, `POST /api/professor` invalido | Erros de validacao com status 400 e mensagens de campo. |
+| `branch-6-pessoa-curso-separados` | Revalidar estabilidade da etapa intermediaria. | Repetir `CRUD` e `/busca` de Pessoa e Curso | Mesmo comportamento funcional das etapas 3 e 5. |
+| `branch-7-roles-professor-aluno` | Confirmar autorizacao por perfil (ALUNO x PROFESSOR). | `POST /api/auth/register-aluno`, `GET /api/auth/usuarios`, `POST /api/pessoas` com token ALUNO | `GET /usuarios` permitido para professor e `403` para operacao de escrita com aluno. |
+| `branch-8-microservicos` | Validar gateway + servicos de matricula em arquitetura distribuida. | `GET /gateway/matriculas`, `POST /gateway/matriculas`, `GET /api/matriculas/{id}/detalhada` | Resposta via gateway e resposta detalhada do servico de matricula. |
+
 ## 2. Mapa tecnico do backend
 
 Pacote base atual:

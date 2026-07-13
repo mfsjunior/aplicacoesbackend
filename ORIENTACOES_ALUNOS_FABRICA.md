@@ -6,13 +6,6 @@ Este guia define como executar a atividade de forma correta, com evolucao por ev
 
 Cada aluno deve implementar codigo manualmente, acompanhando a linha evolutiva do projeto da primeira ate a ultima branch.
 
-## Regra obrigatoria de desenvolvimento
-
-1. Implementar a mao pelo menos 1 evento de cada etapa da evolucao.
-2. Como existem varias entidades, escolher no minimo 2 entidades para atravessar todas as etapas (exemplo: Pessoa e Curso, ou Professor e Disciplina).
-3. Seguir da primeira ate a ultima branch em ordem logica.
-4. Se a ultima branch ja tiver tudo pronto, usar como referencia tecnica, mas reconstruir por etapas no seu fluxo.
-
 ## Ordem de evolucao que deve ser seguida
 
 1. branch-1-monolito-basico

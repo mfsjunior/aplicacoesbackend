@@ -52,7 +52,8 @@ Entidades principais:
 Base tecnica observada:
 
 - Aplicacao Spring Boot monolitica em `backend`.
-- Persistencia via Spring Data JPA e banco H2 em memoria.
+- Persistencia via Spring Data MongoDB (sem JPA).
+- Conexao direcionada para MongoDB (local ou MongoDB Atlas).
 - Estrutura em camadas completa para entidades do dominio.
 - Endpoints REST de CRUD ja presentes para as entidades principais.
 
@@ -61,6 +62,7 @@ Execucao:
 ```bash
 git checkout branch-1-monolito-basico
 cd backend
+$env:MONGODB_URI="mongodb+srv://<usuario>:<senha>@<cluster>/<database>?retryWrites=true&w=majority"
 mvn spring-boot:run
 ```
 

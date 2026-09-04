@@ -7,11 +7,11 @@
 
     <!-- Informações básicas do projeto -->
     <groupId>com.example</groupId>
-    <artifactId>crudmongo</artifactId>
+    <artifactId>crud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>crudmongo</name>
+    <name>crud</name>
     <description>CRUD com Spring Boot + MongoDB</description>
 
     <!-- Define o projeto pai como Spring Boot Starter Parent -->
@@ -117,3 +117,4 @@
         </plugins>
     </build>
 </project>
+

@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.pessoaservice.config;
 
-import com.exemplo.crud.Model.Pessoa;
-import com.exemplo.crud.repository.PessoaRepository;
+import com.exemplo.pessoaservice.model.Pessoa;
+import com.exemplo.pessoaservice.repository.PessoaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,3 +34,4 @@ public class PessoaDataLoader {
         };
     }
 }
+

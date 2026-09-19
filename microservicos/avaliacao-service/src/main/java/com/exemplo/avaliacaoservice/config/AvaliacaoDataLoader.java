@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.avaliacaoservice.config;
 
-import com.exemplo.crud.Model.Avaliacao;
-import com.exemplo.crud.repository.AvaliacaoRepository;
+import com.exemplo.avaliacaoservice.model.Avaliacao;
+import com.exemplo.avaliacaoservice.repository.AvaliacaoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,3 +16,4 @@ public class AvaliacaoDataLoader {
         };
     }
 }
+

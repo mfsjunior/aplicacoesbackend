@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.turmaservice.config;
 
-import com.exemplo.crud.Model.Turma;
-import com.exemplo.crud.repository.TurmaRepository;
+import com.exemplo.turmaservice.model.Turma;
+import com.exemplo.turmaservice.repository.TurmaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,3 +16,4 @@ public class TurmaDataLoader {
         };
     }
 }
+

@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.professorservice.config;
 
-import com.exemplo.crud.Model.Professor;
-import com.exemplo.crud.repository.ProfessorRepository;
+import com.exemplo.professorservice.model.Professor;
+import com.exemplo.professorservice.repository.ProfessorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,3 +16,4 @@ public class ProfessorDataLoader {
         };
     }
 }
+

@@ -2,6 +2,7 @@ package com.exemplo.disciplinaservice.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import com.exemplo.disciplinaservice.security.JwtAuthFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,4 +57,5 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 }
+
 

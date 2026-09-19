@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.cursoservice.config;
 
-import com.exemplo.crud.Model.Curso;
-import com.exemplo.crud.repository.CursoRepository;
+import com.exemplo.cursoservice.model.Curso;
+import com.exemplo.cursoservice.repository.CursoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import com.github.javafaker.Faker;
 
 import java.util.Locale;
 @Configuration
-public class DataLoader {
+public class CursoDataLoader {
 
     @Bean
     CommandLineRunner loadDatabase(CursoRepository repository) {
@@ -36,3 +36,4 @@ public class DataLoader {
 
     
 }
+

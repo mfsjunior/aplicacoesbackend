@@ -1,7 +1,7 @@
-package com.exemplo.crud.config;
+package com.exemplo.disciplinaservice.config;
 
-import com.exemplo.crud.Model.Disciplina;
-import com.exemplo.crud.repository.DisciplinaRepository;
+import com.exemplo.disciplinaservice.model.Disciplina;
+import com.exemplo.disciplinaservice.repository.DisciplinaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,3 +16,4 @@ public class DisciplinaDataLoader {
         };
     }
 }
+

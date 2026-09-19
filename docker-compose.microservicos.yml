@@ -6,9 +6,19 @@ services:
     ports:
       - "8080:8080"
     depends_on:
+      - auth-service
       - matricula-service
       - pessoa-service
       - curso-service
+    networks:
+      - microservices-network
+
+  auth-service:
+    build:
+      context: ./microservicos/auth-service
+    container_name: auth-service
+    ports:
+      - "8087:8087"
     networks:
       - microservices-network
 
@@ -69,3 +79,4 @@ services:
 networks:
   microservices-network:
     driver: bridge
+

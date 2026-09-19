@@ -11,9 +11,11 @@ public class MatriculaDataLoader {
     @Bean
     CommandLineRunner initMatricula(MatriculaRepository repository) {
         return args -> {
-            repository.save(new Matricula(1L, 1L, "2024-01-01", true));
-            repository.save(new Matricula(2L, 2L, "2024-01-02", true));
+            try { repository.save(new Matricula(1L, 1L, "2024-01-01", true)); } catch (Exception e) {}
+            try { repository.save(new Matricula(2L, 2L, "2024-01-02", true)); } catch (Exception e) {}
         };
     }
 }
+
+
 

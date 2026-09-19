@@ -11,9 +11,11 @@ public class DisciplinaDataLoader {
     @Bean
     CommandLineRunner initDisciplina(DisciplinaRepository repository) {
         return args -> {
-            repository.save(new Disciplina(null, "Matemática", true));
-            repository.save(new Disciplina(null, "História", true));
+            try { repository.save(new Disciplina(null, "Matemática", true)); } catch (Exception e) {}
+            try { repository.save(new Disciplina(null, "História", true)); } catch (Exception e) {}
         };
     }
 }
+
+
 

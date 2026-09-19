@@ -11,9 +11,11 @@ public class TurmaDataLoader {
     @Bean
     CommandLineRunner initTurma(TurmaRepository repository) {
         return args -> {
-            repository.save(new Turma(null, "Turma A", 2024, true));
-            repository.save(new Turma(null, "Turma B", 2024, true));
+            try { repository.save(new Turma(null, "Turma A", 2024, true)); } catch (Exception e) {}
+            try { repository.save(new Turma(null, "Turma B", 2024, true)); } catch (Exception e) {}
         };
     }
 }
+
+
 

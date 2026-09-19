@@ -10,5 +10,6 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 # Carrega variáveis do .env antes de rodar o jar
-ENTRYPOINT ["sh", "-c", ". .env && java -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
 

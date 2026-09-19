@@ -22,7 +22,7 @@ public class CursoDataLoader {
                     Curso curso = new Curso();
                     curso.setNome(faker.educator().course());
                     curso.setCargaHoraria(faker.number().numberBetween(20, 200));
-                    repository.save(curso);
+                    try { repository.save(curso); } catch (Exception e) {}
                 }
 
                 System.out.println("✅ Banco de cursos populado com 200 registros!");
@@ -36,4 +36,6 @@ public class CursoDataLoader {
 
     
 }
+
+
 

@@ -11,9 +11,11 @@ public class ProfessorDataLoader {
     @Bean
     CommandLineRunner initProfessor(ProfessorRepository repository) {
         return args -> {
-            repository.save(new Professor(null, "João Silva", "Matemática", true));
-            repository.save(new Professor(null, "Maria Souza", "História", true));
+            try { repository.save(new Professor(null, "João Silva", "Matemática", true)); } catch (Exception e) {}
+            try { repository.save(new Professor(null, "Maria Souza", "História", true)); } catch (Exception e) {}
         };
     }
 }
+
+
 

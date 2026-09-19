@@ -7,38 +7,83 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: auth-docs
+          uri: http://auth-service:8087
+          predicates:
+            - Path=/auth-docs/**
+          filters:
+            - RewritePath=/auth-docs/(?<segment>.*), /${segment}
         - id: auth-service
           uri: http://auth-service:8087
           predicates:
             - Path=/api/auth/**
+            
+        - id: pessoa-docs
+          uri: http://pessoa-service:8082
+          predicates:
+            - Path=/pessoa-docs/**
+          filters:
+            - RewritePath=/pessoa-docs/(?<segment>.*), /${segment}
         - id: pessoa-service
           uri: http://pessoa-service:8082
           predicates:
             - Path=/api/pessoas/**
+            
+        - id: curso-docs
+          uri: http://curso-service:8083
+          predicates:
+            - Path=/curso-docs/**
+          filters:
+            - RewritePath=/curso-docs/(?<segment>.*), /${segment}
         - id: curso-service
           uri: http://curso-service:8083
           predicates:
             - Path=/api/cursos/**
+            
+        - id: disciplina-docs
+          uri: http://disciplina-service:8084
+          predicates:
+            - Path=/disciplina-docs/**
+          filters:
+            - RewritePath=/disciplina-docs/(?<segment>.*), /${segment}
         - id: disciplina-service
           uri: http://disciplina-service:8084
           predicates:
             - Path=/api/disciplinas/**
+            
+        - id: professor-docs
+          uri: http://professor-service:8085
+          predicates:
+            - Path=/professor-docs/**
+          filters:
+            - RewritePath=/professor-docs/(?<segment>.*), /${segment}
         - id: professor-service
           uri: http://professor-service:8085
           predicates:
             - Path=/api/professores/**
+            
+        - id: turma-docs
+          uri: http://turma-service:8086
+          predicates:
+            - Path=/turma-docs/**
+          filters:
+            - RewritePath=/turma-docs/(?<segment>.*), /${segment}
         - id: turma-service
           uri: http://turma-service:8086
           predicates:
             - Path=/api/turmas/**
+            
+        - id: matricula-docs
+          uri: http://matricula-service:8081
+          predicates:
+            - Path=/matricula-docs/**
+          filters:
+            - RewritePath=/matricula-docs/(?<segment>.*), /${segment}
         - id: matricula-service
           uri: http://matricula-service:8081
           predicates:
             - Path=/api/matriculas/**
-        - id: avaliacao-service
-          uri: http://avaliacao-service:8088
-          predicates:
-            - Path=/api/avaliacoes/**
+            
       globalcors:
         cors-configurations:
           '[/**]':
@@ -51,3 +96,21 @@ spring:
               - PATCH
               - OPTIONS
             allowedHeaders: "*"
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Auth Service
+        url: /auth-docs/v3/api-docs
+      - name: Pessoa Service
+        url: /pessoa-docs/v3/api-docs
+      - name: Curso Service
+        url: /curso-docs/v3/api-docs
+      - name: Disciplina Service
+        url: /disciplina-docs/v3/api-docs
+      - name: Professor Service
+        url: /professor-docs/v3/api-docs
+      - name: Turma Service
+        url: /turma-docs/v3/api-docs
+      - name: Matricula Service
+        url: /matricula-docs/v3/api-docs

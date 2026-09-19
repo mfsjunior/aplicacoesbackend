@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/register-aluno").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // apenas PROFESSOR pode registrar novos usuários
                 .requestMatchers("/api/auth/register").hasRole("PROFESSOR")
                 // ALUNO e PROFESSOR podem fazer leituras
@@ -57,5 +58,6 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 }
+
 
 

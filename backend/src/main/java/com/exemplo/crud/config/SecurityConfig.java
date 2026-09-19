@@ -23,21 +23,30 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .headers(headers -> headers.frameOptions(frame -> frame.disable())) // necessário para H2 console
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // rotas públicas
-                .requestMatchers("/api/auth/login").permitAll()
+                // rotas publicas - login e register
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                // H2 console
                 .requestMatchers("/h2-console/**").permitAll()
-                // apenas PROFESSOR pode registrar novos usuários
-                .requestMatchers("/api/auth/register").hasRole("PROFESSOR")
+                // Swagger UI e OpenAPI
+                .requestMatchers(
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                ).permitAll()
+
                 // ALUNO e PROFESSOR podem fazer leituras
-                .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ALUNO", "PROFESSOR")
+                .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ALUNO", "PROFESSOR")
                 // apenas PROFESSOR pode criar, editar e excluir
-                .requestMatchers(HttpMethod.POST, "/**").hasRole("PROFESSOR")
-                .requestMatchers(HttpMethod.PUT, "/**").hasRole("PROFESSOR")
-                .requestMatchers(HttpMethod.DELETE, "/**").hasRole("PROFESSOR")
-                .anyRequest().hasRole("PROFESSOR")
+                .requestMatchers(HttpMethod.POST, "/api/**").hasRole("PROFESSOR")
+                .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("PROFESSOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("PROFESSOR")
+                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -46,7 +55,7 @@ public class SecurityConfig {
     @Bean
     public FilterRegistrationBean<JwtAuthFilter> jwtFilterRegistration(JwtAuthFilter filter) {
         FilterRegistrationBean<JwtAuthFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.setEnabled(false); // impede registro automÃ¡tico fora do Spring Security
+        registration.setEnabled(false);
         return registration;
     }
 

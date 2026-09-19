@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,13 +53,13 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
             String role = auth.getAuthorities().stream()
                     .findFirst()
                     .map(a -> a.getAuthority().replace("ROLE_", ""))
                     .orElse("USER");
-            String token = jwtUtil.generateToken(request.username(), role);
+            String token = jwtUtil.generateToken(request.getUsername(), role);
             return ResponseEntity.ok(new LoginResponse(token, role));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -83,12 +82,12 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        String role = request.role() != null ? request.role() : "ALUNO";
+        String role = request.getRole() != null ? request.getRole() : "ALUNO";
         if (!role.equals("ALUNO") && !role.equals("PROFESSOR")) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Role invalida. Use ALUNO ou PROFESSOR."));
         }
-        usuarioService.salvarUsuario(request.username(), request.password(), role);
+        usuarioService.salvarUsuario(request.getUsername(), request.getPassword(), role);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RegisterResponse("Usuario registrado com sucesso"));
     }

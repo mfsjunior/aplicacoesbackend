@@ -22,6 +22,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // Seguranca aplica APENAS a /api/** - Swagger, H2, etc ficam livres
+            .securityMatcher("/api/**")
             .csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -29,17 +31,6 @@ public class SecurityConfig {
                 // rotas publicas - login e register
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                // H2 console
-                .requestMatchers("/h2-console/**").permitAll()
-                // Swagger UI e OpenAPI
-                .requestMatchers(
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/webjars/**"
-                ).permitAll()
-
                 // ALUNO e PROFESSOR podem fazer leituras
                 .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ALUNO", "PROFESSOR")
                 // apenas PROFESSOR pode criar, editar e excluir

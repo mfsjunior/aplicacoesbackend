@@ -27,9 +27,9 @@ public class PessoaDataLoader {
                     repository.save(pessoa);
                 }
 
-                System.out.println("✅ Banco de pessoas populado com 200 registros!");
+                System.out.println("Banco de pessoas populado com 50000 registros!");
             } else {
-                System.out.println("ℹ️ Banco de pessoas já contém dados, não foi necessário repopular.");
+                System.out.println("Banco de pessoas ja contem dados, n�o foi necess�rio repopular.");
             }
         };
     }

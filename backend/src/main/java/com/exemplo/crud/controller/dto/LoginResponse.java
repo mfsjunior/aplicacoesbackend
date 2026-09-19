@@ -2,13 +2,25 @@ package com.exemplo.crud.controller.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "Resposta da autenticação contendo o token JWT")
-public record LoginResponse(
-        @Schema(description = "Token JWT para autenticação nas requisições", 
-                example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm9mZXNzb3IxIiwicm9sZSI6IlBST0ZFU1NPUiIsImlhdCI6MTcyNjc0MDAwMH0.abc123")
-        String token,
+@Schema(description = "Resposta da autenticacao contendo o token JWT")
+public class LoginResponse {
 
-        @Schema(description = "Role do usuário autenticado", example = "PROFESSOR", 
-                allowableValues = {"ALUNO", "PROFESSOR"})
-        String role
-) {}
+    @Schema(description = "Token JWT para autenticacao nas requisicoes",
+            example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcm9mZXNzb3IxIn0.abc123")
+    private String token;
+
+    @Schema(description = "Role do usuario autenticado", example = "PROFESSOR")
+    private String role;
+
+    public LoginResponse() {}
+
+    public LoginResponse(String token, String role) {
+        this.token = token;
+        this.role = role;
+    }
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+}

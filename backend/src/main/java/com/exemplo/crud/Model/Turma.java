@@ -1,15 +1,24 @@
 package com.exemplo.crud.Model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "turma")
+@Schema(description = "Entidade que representa uma turma")
 public class Turma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID unico da turma", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(description = "Nome da turma", example = "Turma A - Manha")
     private String nome;
+
+    @Schema(description = "Ano da turma", example = "2026")
     private int ano;
+
+    @Schema(description = "Status ativo/inativo", example = "true")
     private boolean ativo;
 
     public Turma() {}
